@@ -11,10 +11,10 @@ const DeviceInformation = require('./deviceInformation').DeviceInformation;
 let digitalTwinClient;
 
 
-const propertyUpdateHandler = async (interfaceInstance, propertyName, reportedValue, desiredValue, version) => {
+const propertyUpdateHandler = async (component, propertyName, reportedValue, desiredValue, version) => {
   console.log('Received an update for ' + propertyName + ': ' + JSON.stringify(desiredValue));
   try {
-    await digitalTwinClient.report(interfaceInstance, propertyName, desiredValue, {
+    await digitalTwinClient.report(component, propertyName, desiredValue, {
       code: 200,
       description: 'helpful descriptive text',
       version: version
@@ -26,7 +26,7 @@ const propertyUpdateHandler = async (interfaceInstance, propertyName, reportedVa
 };
 
 const commandHandler = (request, response) => {
-  console.log('received command: ' + request.commandName + ' for interfaceInstance: ' + request.interfaceInstanceName);
+  console.log('received command: ' + request.commandName + ' for component: ' + request.componentName);
   response.acknowledge(200, 'helpful response text')
     .then(() => console.log('acknowledgement succeeded.'))
     .catch(() => console.log('acknowledgement failed'));
@@ -42,8 +42,8 @@ async function main() {
   // mqtt is implied in this static method
   digitalTwinClient = DigitalTwinClient.fromConnectionString(capabilityModel, process.env.DEVICE_CONNECTION_STRING);
 
-  // Add the interface instances to the Digital Twin Client
-  digitalTwinClient.addInterfaceInstances(
+  // Add the components to the Digital Twin Client
+  digitalTwinClient.addComponents(
     environmentalSensor,
     deviceInformation,
   );
@@ -55,7 +55,7 @@ async function main() {
   // Ex. for `blink` property in the EnvironmentalSensor, it will now be handled by the commandHandler method that you wrote.
   digitalTwinClient.enableCommands();
 
-  // enablePropertyUpdates will use the device twin to listen for updates to the writable properties in the interface instances that have been set.
+  // enablePropertyUpdates will use the device twin to listen for updates to the writable properties in the components that have been set.
   // Ex. for `brightness` property, which is set as a writable property, updates will be handled by the propertyUpdateHandler you've written.
   await digitalTwinClient.enablePropertyUpdates();
 

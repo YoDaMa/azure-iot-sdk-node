@@ -5,7 +5,7 @@ const IoTHubTokenCredentials = require('azure-iot-digitaltwins-service').IoTHubT
 const DigitalTwinServiceClient = require('azure-iot-digitaltwins-service').DigitalTwinServiceClient;
 
 const deviceId = '<DEVICE_ID_GOES_HERE>';
-const interfaceInstanceName = '<INTERFACE_INSTANCE_NAME_GOES_HERE>'; // for the environmental sensor, you can try "environmentalSensor"
+const componentName = '<INTERFACE_INSTANCE_NAME_GOES_HERE>'; // for the environmental sensor, you can try "environmentalSensor"
 const propertyName = '<PROPERTY_NAME_GOES_HERE>'; // for the environmental sensor, try "brightness"
 const propertyValue = '<PROPERTY_VALUE_GOES_HERE>'; // for the environmental sensor, try 42 (note that this is a number, not a string, so don't include quotes).
 
@@ -28,7 +28,7 @@ async function main() {
 
   // Update digital twin and verify the update
   try {
-    const updatedDigitalTwin = await digitalTwinServiceClient.updateDigitalTwinProperty(deviceId, interfaceInstanceName, propertyName, propertyValue);
+    const updatedDigitalTwin = await digitalTwinServiceClient.updateDigitalTwinProperty(deviceId, componentName, propertyName, propertyValue);
 
     // Print updated Twin
     console.log(JSON.stringify(updatedDigitalTwin.interfaces, null, 2));

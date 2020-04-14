@@ -21,7 +21,7 @@ You need to install the [Node.js][nodejs_lnk] JavaScript runtime environment to 
  Features
 
 * Get the twin of an existing device
-* Get a single interface instance of an existing device digital twin
+* Get a single component of an existing device digital twin
 * Get a model from the Model Repository
 * Update digital twin of an existing device
 * Update a single property of an existing digital twin
@@ -50,9 +50,9 @@ const digitalTwin = await digitalTwinServiceClient.getDigitalTwin(deviceId);
 console.log(JSON.stringify(digitalTwin, null, 2));
 
 // List interfaces by name
-for (const interfaceInstanceName in digitalTwin.interfaces) {
-  if (digitalTwin.interfaces.hasOwnProperty(interfaceInstanceName)) {
-    console.log(JSON.stringify(digitalTwin.interfaces[interfaceInstanceName]));
+for (const componentName in digitalTwin.interfaces) {
+  if (digitalTwin.interfaces.hasOwnProperty(componentName)) {
+    console.log(JSON.stringify(digitalTwin.interfaces[componentName]));
   }
 }
 ```

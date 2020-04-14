@@ -10,10 +10,10 @@ const uuid = require('uuid');
 // - create a Digital Twin enabled Device using the RegistryManager
 // - create a Digital Twin Service Client using the DigitalTwinServiceClient constructor
 // - get the Digital Twin
-// - get a single Digital Twin Interface Instance by name
+// - get a single Digital Twin Component by name
 // - update the Digital Twin with patch
 // - update the Digital Twin property using property update API
-// - list all the Digital Twin Interface Instances
+// - list all the Digital Twin Components
 async function main() {
   // IoT Hub connection string has to be set to system environment variable IOTHUB_CONNECTION_STRING
 
@@ -38,8 +38,8 @@ async function main() {
   // ...
   const modelId = '<model_id>';
 
-  // Add/Get a interface instance name and property name from the Model
-  const interfaceInstanceName = '<interface_instance_name>';
+  // Add/Get a component name and property name from the Model
+  const componentName = '<interface_instance_name>';
   const propertyName = '<property_name>';
   const propertyValue = 42;
 
@@ -56,15 +56,15 @@ async function main() {
   // Print original model
   console.log(JSON.stringify(digitalTwinModel, null, 2));
 
-  // Get interface instance by name
-  const digitalTwinInterfaceInstanceName = await digitalTwinServiceClient.getDigitalTwinInterfaceInstance(deviceDescription.deviceId, interfaceInstanceName);
-  // Print original interface instance
-  console.log(JSON.stringify(digitalTwinInterfaceInstanceName, null, 2));
+  // Get component by name
+  const digitalTwinComponentName = await digitalTwinServiceClient.getDigitalTwinComponent(deviceDescription.deviceId, componentName);
+  // Print original component
+  console.log(JSON.stringify(digitalTwinComponentName, null, 2));
 
   // Update property using full patch
   const patch = {
     interfaces: {
-      [interfaceInstanceName]: {
+      [componentName]: {
         properties: {
           [propertyName]: {
             desired: {
@@ -88,7 +88,7 @@ async function main() {
   console.log(JSON.stringify(digitalTwin, null, 2));
 
   try {
-    const updatedDigitalTwin = await digitalTwinServiceClient.updateDigitalTwinProperty(deviceDescription.deviceId, interfaceInstanceName, propertyName, propertyValue);
+    const updatedDigitalTwin = await digitalTwinServiceClient.updateDigitalTwinProperty(deviceDescription.deviceId, componentName, propertyName, propertyValue);
 
     // Print updated twin
     console.log(JSON.stringify(updatedDigitalTwin.interfaces, null, 2));
@@ -97,9 +97,9 @@ async function main() {
   }
 
   // List interfaces by name
-  for (const interfaceInstanceName in digitalTwin) {
-    if (digitalTwin.interfaces.hasOwnProperty(interfaceInstanceName)) {
-      console.log(JSON.stringify(digitalTwin.interfaces[interfaceInstanceName]));
+  for (const componentName in digitalTwin) {
+    if (digitalTwin.interfaces.hasOwnProperty(componentName)) {
+      console.log(JSON.stringify(digitalTwin.interfaces[componentName]));
     }
   }
 

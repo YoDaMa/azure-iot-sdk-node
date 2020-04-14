@@ -21,7 +21,7 @@ You need to install the [Node.js][nodejs_lnk] JavaScript runtime environment to 
 ## Latest updates
 
 The telemetry interface has been adjusted.  We are de-emphasizing the ability to send individual properties.
-We have introduced a new method on the interface instance called sendTelemetry. Its argument is an object that can
+We have introduced a new method on the component called sendTelemetry. Its argument is an object that can
 send multiple properties with a single message.
 
 We are likely to remove the ability to do a .send in the near future.
@@ -51,9 +51,9 @@ const Mqtt = require('azure-iot-device-mqtt').Mqtt;
 
 const EnvironmentalSensor = require('./environmentalinterface').EnvironmentalSensor;
 
-const propertyUpdateHandler = (interfaceInstance, propertyName, reportedValue, desiredValue, version) => {
+const propertyUpdateHandler = (component, propertyName, reportedValue, desiredValue, version) => {
   console.log('Received an update for ' + propertyName + ': ' + JSON.stringify(desiredValue));
-  interfaceInstance[propertyName].report(desiredValue, {
+  component[propertyName].report(desiredValue, {
     code: 200,
     description: 'helpful descriptive text',
     version: version
@@ -63,7 +63,7 @@ const propertyUpdateHandler = (interfaceInstance, propertyName, reportedValue, d
 };
 
 const commandHandler = (request, response) => {
-  console.log('received command: ' + request.commandName + ' for interfaceInstance: ' + request.interfaceInstanceName);
+  console.log('received command: ' + request.commandName + ' for component: ' + request.componentName);
   response.acknowledge(200, 'helpful response text')
     .then(() => console.log('acknowledgement succeeded.'))
     .catch(() => console.log('acknowledgement failed'));
@@ -77,7 +77,7 @@ const capabilityModel = 'dtmi:azureiot:samplemodel;1';
 
 async function main() {
   const digitalTwinClient = new DigitalTwinClient(capabilityModel, deviceClient);
-  digitalTwinClient.addInterfaceInstance(environmentalSensor);
+  digitalTwinClient.addComponent(environmentalSensor);
   await digitalTwinClient.register();
   await environmentalSensor.sendTelemetry({temp: 65.5, humid: 12.2});
   console.log('Done sending telemetry.');
